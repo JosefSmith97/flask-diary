@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+<div class="container">
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-4">
+      <h6>Entry Date and Time: </h6>
+      <span>{{entry.date}}</span>
+    </div>
+    <div class="col-md-4">
+      <p>Related Project: <a href="{{ url_for('project', project_id=project.project_id)}}">{{entry.related_project}}</a></p>
+    </div>
+    <div class="col-md-4">
+      <p>Other Tags: {{entry.tags}}</p>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-8">
+      <h6>Entry: </h6>
+      <span>{{entry.entry_text}}</span>
+    </div>
+    <div class="col--md-4">
+      <a href="{{ url_for('edit_entry',entry_id=entry.entry_id) }}" class="btn btn-dark">Edit this entry</a>
+      <a href="{{ url_for('confirm_delete_entry', entry_id=entry.entry_id) }}" class="btn btn-dark">Delete this entry</a>
+    </div>
+  </div>
+</div>
+<br>
+{% if rel_length > 0 %}
+<div class="container">
+  <table id="related-entry-table" class="table table-striped">
+    <h6>Other entries tagged with "{{entry.related_project}}"</h6>
+    <thead>
+      <tr>
+        <th>Entry Date</th>
+        <th>Entry</th>
+        <th>Related Project</th>
+        <th>Other Tags</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for related_entry in related_entries %}
+        <tr>
+          <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{related_entry.date}}</a></td>
+          <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{related_entry.entry_text | truncate(60) }}</a></td>
+          <td><a href="{{ url_for('project', project_id=project.project_id)}}">{{related_entry.related_project}}</a></td>
+          <td>{{related_entry.tags}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endif%}
+{% endblock content %}

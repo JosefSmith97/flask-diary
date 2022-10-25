@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+{% if current_user.is_authenticated %}
+<div class="container">
+<table id="entry-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Entry Date</th>
+      <th>Entry</th>
+      <th>Tagged Project</th>
+      <th>Other Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+      <tr>
+        <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.date}}</a></td>
+        <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.entry_text | truncate(60) }}</a></td>
+        <td>{{entry.related_project}}</td>
+        <td>{{entry.tags}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+{% if prev_url %}
+<a href="{{ prev_url }}">Newer posts</a>
+{% endif %}
+{% if next_url %}
+<a href="{{ next_url }}">Older posts</a>
+{% endif %}
+<br>
+<br>
+<a href="{{ url_for('new_entry') }}" class="btn btn-dark">New Entry</a>
+</div>
+{% else %}
+<h1>Web-Based Writing Journal Application</h1>
+<br>
+<p>A home on the web to keep track of all your writing projects, word counts and scribblings.</p>
+<br>
+<span>Already have an account? Click <a href="{{ url_for('login')}}">here</a> to login!</span><br>
+<span>Don't have an account yet? Click <a href="{{ url_for('login')}}">here</a> to register!</span>
+{% endif %}
+{% endblock content %}

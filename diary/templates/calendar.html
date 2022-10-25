@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<br>
+{% if search %}
+<h2>Search Term: {{search}}</h2>
+{% else %}
+<h2>{{month_name}} {{year}}</h2>
+{% endif %}
+<br>
+{% if search %}
+  <a href="{{ url_for('calendar', query='current') }}" class="btn btn-dark" method="GET">Back to Current Month</a>
+{% else %}
+<div class="row">
+  <div class="col-sm">
+  <a href="{{ url_for('calendar', query='minus') }}" class="btn btn-dark" method="GET">Previous Month</a>
+  </div>
+  <div class="col-sm">
+  <a href="{{ url_for('calendar', query='current') }}" class="btn btn-dark" method="GET">Back to Current Month</a>
+  </div>
+  <div class="col-sm">
+  <a href="{{ url_for('calendar', query='plus') }}" class="btn btn-dark" method="GET">Next Month</a>
+  </div>
+</div>
+{% endif %}
+<table id="calendar-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Entry Date</th>
+      <th>Entry</th>
+      <th>Related Project</th>
+      <th>Other Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+      <tr>
+        <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.date}}</a></td>
+        <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.entry_text | truncate(60) }}</a></td>
+        <td>{{entry.related_project}}
+        <td>{{entry.tags}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock content %}

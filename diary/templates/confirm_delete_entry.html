@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  <h1>Are you sure you want to delete this entry?</h1>
+  <h2>{{entry.entry_text}}</h2>
+  <br>
+  <a href="{{ url_for('delete_entry', entry_id=entry.entry_id) }}" class="btn btn-dark">Yes</a>
+  <a href="{{ url_for('entry', entry_id=entry.entry_id) }}" class="btn btn-dark">No</a>
+</div>
+{% endblock content %}

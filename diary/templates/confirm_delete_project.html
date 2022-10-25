@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  <h1>Are you sure you want to delete this project: {{project.project_title}}?</h1>
+  <h3>This will also delete the following entries associated with this project:</h3>
+  {% for entry in entries %}
+    <h4>{{entry.entry_text}}</h4>
+  {% endfor %}
+  <br>
+  <a href="{{ url_for('delete_project', project_id=project.project_id) }}" class="btn btn-dark">Yes</a>
+  <a href="{{ url_for('project', project_id=project.project_id) }}" class="btn btn-dark">No</a>
+</div>
+{% endblock content %}

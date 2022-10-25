@@ -1,0 +1,15 @@
+#individual_project {
+  display: grid;
+}
+
+ #weekly_bar {
+   height:24px;
+   width:0;
+   color: grey;
+}
+
+#total_bar {
+  height:24px;
+  width:0;
+  color: grey;
+}

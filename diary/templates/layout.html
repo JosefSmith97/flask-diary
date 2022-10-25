@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% extends 'bootstrap/base.html' %}
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static',filename='bootstrap.min.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<div class="container">
+{% block title %}
+Writing Journal Application
+{% endblock %}
+{% block navbar %}
+<h1 style="text-align:center; padding:1rem;"> Writing Journal Application</h1><br>
+  <div class="navbar navbar-default bg-secondary border justify-content-around">
+    <div class="col text-centre">
+    <a class="text-white" class="nav-link" id="home" href="{{ url_for('home') }}">Home</a>
+    </div>
+    {% if current_user.is_authenticated %}
+      <div class="col text-centre">
+      <span id="usergreeting" class="text-white">Hello, {{ current_user.first_name }}!</span>
+      </div>
+      <div class="col text-centre">
+      <a id="logoutlink" class="text-white" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    {% else %}
+      <div class="col text-centre">
+      <span id="usergreeting" class="text-white">Hello, Guest!</span>
+      </div>
+      <div class="col text-centre">
+      <a id="registerlink" class="text-white" class="nav-link" href="{{ url_for('register') }}">Register</a>
+      </div>
+      <div class="col text-centre">
+      <a id="loginlink" class="text-white" class="nav-link" href="{{ url_for('login') }}">Login</a>
+      </div>
+    {% endif %}
+  </div>
+  {% if current_user.is_authenticated %}
+  <div class="navbar navbar-default bg-light border justify-content-around">
+    <div class="col">
+      <span><a id="calendarlink" class="text-dark" class="nav-link" href= "{{ url_for('calendar', query='current')}}">Calendar View</a></span>
+    </div>
+    <div class="col">
+      <span><a id="projecthublink" class="text-dark" class="nav-link" href="{{ url_for('project_hub') }}">Project Hub</a></span>
+    </div>
+    <div class="col">
+    <form id="searchform" method="GET">
+        <input id="searchbar" type="search" name="search" placeholder="Search...">
+        <button class="button" id="searchbutton" type="submit">Search</button>
+    </form>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <div id="content">
+    <div id="flashes">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ulclass=flashes>
+            {% for messages in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+{% endblock %}
+</div>

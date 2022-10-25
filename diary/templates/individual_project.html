@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+  <br>
+  <h2>{{project.project_title}}</h2>
+  <br>
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-4">
+      <p>Project Genre: {{project.project_type}}</p>
+      {% if project.google_drive == "" %}
+        <a href="{{ url_for('edit_project',project_id=project.project_id) }}">Click here to link this project to a Google Drive file</a>
+      {% else %}
+        <p>Google Drive Link: <a href="{{ url_for('authentication', project_id=project.project_id) }}" target="_blank">{{project.project_title}}</a></p>
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <p>Description: {{project.project_description}}</p>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-8">
+      <p>Current Total Word Count: {{project.total_words_current}}</p>
+    </div>
+    <div class="col-md-4">
+      <p>Total Word Goal: {{project.total_words_goal}}</p>
+    </div>
+  </div>
+    <div class="progress">
+      <div class="progress-bar" id="total_bar"></div>
+    </div>
+  <br>
+  <br>
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-8">
+      <p>Current Word Count For The Week: {{project.weekly_words_current}}</p>
+    </div>
+    <div class="col-md-4">
+      <p>Weekly Word Goal: {{project.weekly_words_goal}}</p>
+    </div>
+  </div>
+    <div class="progress">
+      <div class="progress-bar" id="weekly_bar"></div>
+    </div>
+  <br>
+  <br>
+  <div class="row align-items-center top-buffer">
+    <div class="col-md-4" style="float: left;">
+      <a href="{{ url_for('edit_project',project_id=project.project_id) }}" class="btn btn-dark">Edit this project</a>
+    </div>
+    <div class="col-md-4" style="float: right;">
+      <a href="{{ url_for('confirm_delete_project', project_id=project.project_id) }}" class="btn btn-dark">Delete this project</a>
+    </div>
+    <div class="col-md-4" style="float: right;">
+      <a href="{{ url_for('new_entry', title=project.project_title) }}" class="btn btn-dark">New Entry</a>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <div class="row align-items-center top-buffer">
+    <h4>Associated Journal Entries:</h4>
+  <table id="entry-table" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Entry Date</th>
+        <th>Entry</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.date}}</a></td>
+          <td><a href="{{ url_for('entry', entry_id=entry.entry_id) }}">{{entry.entry_text | truncate(60) }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </div>
+  <br>
+  <br>
+</div>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', (event) => {
+        var weekly_words_goal = {{project.weekly_words_goal}};
+        var weekly_words_current = {{project.weekly_words_current}};
+        var total_words_goal = {{project.total_words_goal}};
+        var total_words_current = {{project.total_words_current}};
+
+        var weekly_percentage = (weekly_words_current / weekly_words_goal) *100;
+        console.log(weekly_percentage);
+        var total_percentage = (total_words_current / total_words_goal) *100;
+        console.log(total_percentage);
+
+        if (weekly_percentage >= 75){
+          document.getElementById('weekly_bar').style.background = "Green";
+          } else if (weekly_percentage >= 25 && weekly_percentage < 75) {
+          document.getElementById('weekly_bar').style.background = "Gold";
+          } else {
+          document.getElementById('weekly_bar').style.background = "DarkRed";
+        };
+
+        if (total_percentage >= 75){
+          document.getElementById('total_bar').style.background = "Green";
+          } else if (total_percentage >= 25 && total_percentage < 75) {
+          document.getElementById('total_bar').style.background = "Gold";
+          } else {
+          document.getElementById('total_bar').style.background = "DarkRed";
+        };
+
+
+        document.getElementById('weekly_bar').style.width = weekly_percentage + '%';
+        document.getElementById('total_bar').style.width = total_percentage + '%';
+        console.log("working");
+      });
+
+    </script>
+{% endblock content %}
